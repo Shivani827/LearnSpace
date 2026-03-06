@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Rooms - Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: white;
+            padding: 16px 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .brand-text {
+            color: #60a5fa;
+        }
+
+        .admin-badge {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #1e293b;
+        }
+
+        .btn-logout {
+            padding: 8px 20px;
+            background: #60a5fa;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-logout:hover {
+            background: #3b82f6;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - 64px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 30px 0;
+            box-shadow: 1px 0 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            color: #64748b;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #eff6ff;
+            color: #1e293b;
+            border-left: 3px solid #60a5fa;
+            padding-left: 29px;
+        }
+
+        .sidebar-menu .icon {
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span class="brand-text">LearnSpace</span>
+            <span class="admin-badge">Admin Panel</span>
+        </div>
+        <div class="navbar-right">
+            <a href="/" class="nav-link">
+                < Home</a>
+                    <span class="nav-link">Hi, Admin</span>
+                    <button id="logoutBtn" class="btn-logout">Log Out</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/admin">
+                        <span class="icon">▦</span> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/pending">
+                        <span class="icon">≡</span> Pending Requests
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/users">
+                        <span class="icon">👥</span> Manage Users
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/rooms" class="active">
+                        <span class="icon">🏢</span> Rooms
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/timetable">
+                        <span class="icon">📅</span> Timetables
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/approved">
+                        <span class="icon">✓</span> Approved Requests
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/rejected">
+                        <span class="icon">✗</span> Rejected Requests
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/admin/daily-allocation">
+                        <span class="icon">📅</span> Daily Allocation
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <% const safeSuccess=typeof success !=='undefined' ? success : null; const safeError=typeof error
+                !=='undefined' ? error : null; const safeRooms=typeof rooms !=='undefined' ? rooms : []; %>
+
+                <% if (safeSuccess) { %>
+                    <div
+                        style="background:#d1fae5;color:#065f46;padding:12px 16px;border-radius:8px;margin-bottom:16px;">
+                        ✅ <%= safeSuccess %>
+                    </div>
+                    <% } %>
+                        <% if (safeError) { %>
+                            <div
+                                style="background:#fee2e2;color:#991b1b;padding:12px 16px;border-radius:8px;margin-bottom:16px;">
+                                ❌ <%= safeError %>
+                            </div>
+                            <% } %>
+
+                                <div
+                                    style="background:white;border-radius:12px;padding:24px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                                    <h2 style="margin:0 0 16px 0;">➕ Add New Room</h2>
+                                    <form method="POST" action="/admin/rooms/add">
+                                        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;">
+
+                                            <div
+                                                style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;">
+                                                <label style="font-size:13px;font-weight:600;">Room No</label>
+                                                <input type="text" name="roomNo" placeholder="e.g. A-101" required
+                                                    style="padding:10px;border:1px solid #d1d5db;border-radius:8px;" />
+                                            </div>
+
+                                            <div
+                                                style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;">
+                                                <label style="font-size:13px;font-weight:600;">Block</label>
+                                                <select name="block" required
+                                                    style="padding:10px;border:1px solid #d1d5db;border-radius:8px;">
+                                                    <option value="">Select Block</option>
+                                                    <option value="Dharithri">Dharithri</option>
+                                                    <option value="Main">Main</option>
+                                                    <option value="Medha">Medha</option>
+                                                </select>
+                                            </div>
+
+                                            <div
+                                                style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;">
+                                                <label style="font-size:13px;font-weight:600;">Type</label>
+                                                <select name="type" required
+                                                    style="padding:10px;border:1px solid #d1d5db;border-radius:8px;">
+                                                    <option value="">Select Type</option>
+                                                    <option value="classroom">Classroom</option>
+                                                    <option value="lab">Lab</option>
+                                                    <option value="seminar-hall">Seminar Hall</option>
+                                                    <option value="auditorium">Auditorium</option>
+                                                </select>
+                                            </div>
+
+                                            <div
+                                                style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:100px;">
+                                                <label style="font-size:13px;font-weight:600;">Capacity</label>
+                                                <input type="number" name="capacity" placeholder="e.g. 60" required
+                                                    style="padding:10px;border:1px solid #d1d5db;border-radius:8px;" />
+                                            </div>
+
+                                            <div
+                                                style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:100px;">
+                                                <label style="font-size:13px;font-weight:600;">Floor</label>
+                                                <input type="number" name="floor" placeholder="e.g. 1"
+                                                    style="padding:10px;border:1px solid #d1d5db;border-radius:8px;" />
+                                            </div>
+
+                                            <div
+                                                style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:150px;">
+                                                <label style="font-size:13px;font-weight:600;">Facilities (comma
+                                                    separated)</label>
+                                                <input type="text" name="facilities" placeholder="e.g. AC, Projector"
+                                                    style="padding:10px;border:1px solid #d1d5db;border-radius:8px;" />
+                                            </div>
+
+                                            <button type="submit"
+                                                style="padding:10px 20px;background:#1d4ed8;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;height:42px;">Add
+                                                Room</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div
+                                    style="background:white;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                                    <h2 style="margin:0 0 16px 0;">🏫 All Rooms (<%= safeRooms.length %>)</h2>
+                                    <div style="overflow-x:auto;">
+                                        <table style="width:100%;border-collapse:collapse;">
+                                            <thead>
+                                                <tr style="background:#1e40af;color:white;">
+                                                    <th style="padding:10px 12px;text-align:left;">Room No</th>
+                                                    <th style="padding:10px 12px;text-align:left;">Block</th>
+                                                    <th style="padding:10px 12px;text-align:left;">Type</th>
+                                                    <th style="padding:10px 12px;text-align:left;">Capacity</th>
+                                                    <th style="padding:10px 12px;text-align:left;">Floor</th>
+                                                    <th style="padding:10px 12px;text-align:left;">Facilities</th>
+                                                    <th style="padding:10px 12px;text-align:center;">Status</th>
+                                                    <th style="padding:10px 12px;text-align:center;">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (safeRooms && safeRooms.length> 0) { %>
+                                                    <% safeRooms.forEach(room=> { %>
+                                                        <tr style="border-bottom:1px solid #e5e7eb;">
+                                                            <td style="padding:10px 12px;"><strong>
+                                                                    <%= room.roomNo %>
+                                                                </strong></td>
+                                                            <td style="padding:10px 12px;">
+                                                                <%= room.block %>
+                                                            </td>
+                                                            <td style="padding:10px 12px;">
+                                                                <%= room.type %>
+                                                            </td>
+                                                            <td style="padding:10px 12px;">
+                                                                <%= room.capacity %> students
+                                                            </td>
+                                                            <td style="padding:10px 12px;">
+                                                                <%= room.floor || 'N/A' %>
+                                                            </td>
+                                                            <td style="padding:10px 12px;">
+                                                                <%= room.facilities && room.facilities.length> 0 ?
+                                                                    room.facilities.join(', ') : '-' %>
+                                                            </td>
+                                                            <td style="padding:10px 12px;text-align:center;">
+                                                                <form method="POST"
+                                                                    action="/admin/rooms/toggle/<%= room._id %>"
+                                                                    style="display:inline;">
+                                                                    <% if (room.isActive) { %>
+                                                                        <button type="submit"
+                                                                            style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
+                                                                            ✅ Active
+                                                                        </button>
+                                                                        <% } else { %>
+                                                                            <button type="submit"
+                                                                                style="background:#6b7280;color:white;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
+                                                                                ⛔ Inactive
+                                                                            </button>
+                                                                            <% } %>
+                                                                </form>
+                                                            </td>
+                                                            <td style="padding:10px 12px;text-align:center;">
+                                                                <a href="/admin/rooms/edit/<%= room._id %>"
+                                                                    style="background:#f59e0b;color:white;padding:6px 12px;border-radius:6px;text-decoration:none;margin-right:6px;font-size:13px;">✏️
+                                                                    Edit</a>
+                                                                <form method="POST"
+                                                                    action="/admin/rooms/delete/<%= room._id %>"
+                                                                    style="display:inline;"
+                                                                    onsubmit="return confirm('Delete this room? This cannot be undone.')">
+                                                                    <button type="submit"
+                                                                        style="background:#ef4444;color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:13px;">🗑️
+                                                                        Delete</button>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="8"
+                                                                        style="padding:20px;text-align:center;color:#888;">
+                                                                        No rooms found</td>
+                                                                </tr>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+        </main>
+    </div>
+    <script>
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', function () {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/logout';
+            }
+        });
+    </script>
+</body>
+
+</html>
