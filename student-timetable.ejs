@@ -1,0 +1,256 @@
+<% const safeYear=typeof year !=='undefined' && year ? year : '' ; const safeBranch=typeof branch !=='undefined' &&
+    branch ? branch : '' ; const safeSection=typeof section !=='undefined' && section ? section : '' ; const
+    safeTimetable=typeof timetable !=='undefined' ? (timetable || []) : []; %>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Timetable - LearnSpace</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <style>
+            .break-cell {
+                background-color: #fbbf24;
+                color: #1e293b;
+                font-weight: 700;
+                font-size: 12px;
+                text-align: center;
+            }
+
+            .lunch-cell {
+                background-color: #fbbf24;
+                color: #1e293b;
+                font-weight: 700;
+                font-size: 12px;
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <img src="/images/image.png" alt="Vignan Logo" class="logo-img" />
+                LearnSpace
+            </div>
+            <div class="navbar-right">
+                <a href="/" class="nav-link">
+                    < Home</a>
+                        <span class="nav-link">Hi, Student</span>
+                        <a href="/login" class="btn-logout">Logout</a>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="layout">
+                <aside class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a href="/student">
+                                <span class="icon">🏠</span> Overview
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/student/timetable" class="active">
+                                <span class="icon">📅</span> Timetable
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/student/rooms">
+                                <span class="icon">🏢</span> View Rooms
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="role-badge">
+                        Role: student
+                        <span class="view-only-badge"
+                            style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">VIEW
+                            ONLY</span>
+                    </div>
+                </aside>
+
+                <main class="main-content">
+                    <!-- Selection Form — always visible -->
+                    <div class="timetable-form-card">
+                        <h3>📅 View Class Timetable</h3>
+                        <p>Select your year, branch and section to load your timetable</p>
+
+                        <form method="GET" action="/student/timetable" class="timetable-form">
+                            <div class="form-row">
+
+                                <div class="form-group">
+                                    <label>Year</label>
+                                    <select name="year" required>
+                                        <option value="">Select Year</option>
+                                        <option value="1" <%- safeYear==='1' ? 'selected' : '' %>>1st Year</option>
+                                        <option value="2" <%- safeYear==='2' ? 'selected' : '' %>>2nd Year</option>
+                                        <option value="3" <%- safeYear==='3' ? 'selected' : '' %>>3rd Year</option>
+                                        <option value="4" <%- safeYear==='4' ? 'selected' : '' %>>4th Year</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Branch</label>
+                                    <select name="branch" required>
+                                        <option value="">Select Branch</option>
+                                        <option value="CSE" <%- safeBranch==='CSE' ? 'selected' : '' %>>CSE</option>
+                                        <option value="ECE" <%- safeBranch==='ECE' ? 'selected' : '' %>>ECE</option>
+                                        <option value="MECH" <%- safeBranch==='MECH' ? 'selected' : '' %>>MECH</option>
+                                        <option value="CIVIL" <%- safeBranch==='CIVIL' ? 'selected' : '' %>>CIVIL
+                                        </option>
+                                        <option value="EEE" <%- safeBranch==='EEE' ? 'selected' : '' %>>EEE</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Section</label>
+                                    <select name="section" required>
+                                        <option value="">Select Section</option>
+                                        <option value="A" <%- safeSection==='A' ? 'selected' : '' %>>Section A</option>
+                                        <option value="B" <%- safeSection==='B' ? 'selected' : '' %>>Section B</option>
+                                        <option value="C" <%- safeSection==='C' ? 'selected' : '' %>>Section C</option>
+                                        <option value="D" <%- safeSection==='D' ? 'selected' : '' %>>Section D</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="load-btn">Load Timetable</button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Timetable — only show when params selected and data exists -->
+                    <% if (safeYear && safeBranch && safeSection) { %>
+                        <% if (safeTimetable && safeTimetable.length> 0) { %>
+
+                            <div class="timetable-wrapper">
+                                <div class="timetable-title">
+                                    <h3>VIGNAN'S INSTITUTE OF INFORMATION TECHNOLOGY (A) :: VISAKHAPATNAM</h3>
+                                    <p>Year: <%= safeYear %> | Branch: <%= safeBranch %> | Section: <%= safeSection %>
+                                    </p>
+                                </div>
+
+                                <div class="table-scroll">
+                                    <table class="timetable">
+                                        <thead>
+                                            <tr>
+                                                <th>DAY</th>
+                                                <th>8:45-9:35</th>
+                                                <th>9:35-10:25</th>
+                                                <th class="break-head">BREAK<br />(10:25-10:50)</th>
+                                                <th>10:50-11:40</th>
+                                                <th>11:40-12:30</th>
+                                                <th>12:30-1:30</th>
+                                                <th class="lunch-head">LUNCH<br />(1:30-2:20)</th>
+                                                <th>2:20-3:10</th>
+                                                <th>3:10-4:00</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% ['MON','TUE','WED','THU','FRI','SAT'].forEach(day=> { %>
+                                                <tr>
+                                                    <td class="day-cell"><strong>
+                                                            <%= day %>
+                                                        </strong></td>
+
+                                                    <!-- Slot 1 -->
+                                                    <% const s1=safeTimetable.find(t=>
+                                                        String(t.day).trim().toUpperCase() === day && parseInt(t.slot)
+                                                        === 1); %>
+                                                        <td class="subject-cell">
+                                                            <%= s1 && s1.subject ? s1.subject : '' %>
+                                                        </td>
+
+                                                        <!-- Slot 2 -->
+                                                        <% const s2=safeTimetable.find(t=>
+                                                            String(t.day).trim().toUpperCase() === day &&
+                                                            parseInt(t.slot) === 2); %>
+                                                            <td class="subject-cell">
+                                                                <%= s2 && s2.subject ? s2.subject : '' %>
+                                                            </td>
+
+                                                            <!-- BREAK cell -->
+                                                            <td class="break-cell">BREAK</td>
+
+                                                            <!-- Slot 3 -->
+                                                            <% const s3=safeTimetable.find(t=>
+                                                                String(t.day).trim().toUpperCase() === day &&
+                                                                parseInt(t.slot) === 3); %>
+                                                                <td class="subject-cell">
+                                                                    <%= s3 && s3.subject ? s3.subject : '' %>
+                                                                </td>
+
+                                                                <!-- Slot 4 -->
+                                                                <% const s4=safeTimetable.find(t=>
+                                                                    String(t.day).trim().toUpperCase() === day &&
+                                                                    parseInt(t.slot) === 4); %>
+                                                                    <td class="subject-cell">
+                                                                        <%= s4 && s4.subject ? s4.subject : '' %>
+                                                                    </td>
+
+                                                                    <!-- Slot 5 -->
+                                                                    <% const s5=safeTimetable.find(t=>
+                                                                        String(t.day).trim().toUpperCase() === day &&
+                                                                        parseInt(t.slot) === 5); %>
+                                                                        <td class="subject-cell">
+                                                                            <%= s5 && s5.subject ? s5.subject : '' %>
+                                                                        </td>
+
+                                                                        <!-- LUNCH cell -->
+                                                                        <td class="lunch-cell">LUNCH</td>
+
+                                                                        <!-- Slot 6 -->
+                                                                        <% const s6=safeTimetable.find(t=>
+                                                                            String(t.day).trim().toUpperCase() === day
+                                                                            && parseInt(t.slot) === 6); %>
+                                                                            <td class="subject-cell">
+                                                                                <%= s6 && s6.subject ? s6.subject : ''
+                                                                                    %>
+                                                                            </td>
+
+                                                                            <!-- Slot 7 -->
+                                                                            <% const s7=safeTimetable.find(t=>
+                                                                                String(t.day).trim().toUpperCase() ===
+                                                                                day && parseInt(t.slot) === 7); %>
+                                                                                <td class="subject-cell">
+                                                                                    <%= s7 && s7.subject ? s7.subject
+                                                                                        : '' %>
+                                                                                </td>
+
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <% } else { %>
+                                <div class="no-data">
+                                    <p>⚠️ No timetable found for Year <%= safeYear %> | <%= safeBranch %> | Section <%=
+                                                    safeSection %>
+                                    </p>
+                                    <p style="font-size:13px; color:#888;">Please contact admin to add timetable data.
+                                    </p>
+                                </div>
+                                <% } %>
+                                    <% } %>
+                </main>
+            </div>
+        </div>
+
+        <script>
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function () {
+                    if (confirm('Are you sure you want to logout?')) {
+                        window.location.href = '/logout';
+                    }
+                });
+            }
+        </script>
+    </body>
+
+    </html>
